@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>JUMAN++</title>
+</head>
+<style>
+body {
+	line-height: 1.6;
+	font-family: Verdana, arial, x-locale-body, sans-serif;
+	letter-spacing: -.00333rem;
+	font-size: 15px;
+	font-size: 1rem;
+}
+</style>
+<body>
+	<input id="parseText"/>
+	<button onclick="parse()">Parse</button>
+	<div id="result"></div>
+</body>
+<script type="text/javascript">
+	function post(url, data, onReady, onError) {
+		var query = [];
+	    for (var key in data)
+	        query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+		var httpRequest = new XMLHttpRequest();
+		httpRequest.open('POST', url);
+		httpRequest.onreadystatechange = function() {
+			if (httpRequest.readyState === XMLHttpRequest.DONE) {
+				if (httpRequest.status === 200) {
+					onReady(httpRequest.responseText);
+				} else {
+					onError();
+				}
+			}
+		};
+		httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		httpRequest.send(query.join('&'));
+	}
+	
+	function parse() {
+		post('/parse'
+			,{parseText: document.getElementById("parseText").value }
+			,function(data) { document.getElementById("result").innerHTML = data; }
+			,function() { alert("Error") });
+	}
+</script>
+</html>
